@@ -27,7 +27,7 @@
 
 
 
-{$: "#nouser" }
+{$: "#nouser" | controls=data.user_id?"#logout":"tmpl.other.html#login" }
 	<p>{$= @controls $}</p>
 {$}
 
