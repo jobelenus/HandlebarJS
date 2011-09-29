@@ -84,6 +84,14 @@
 				if (promise_failed) revoke(old_ret);
 				return publicAPI;
 			};
+
+            publicAPI.fulfill = function(val) {
+				if (promise_fulfilled) {
+                    queue.shift(); // feels like i'm cheating
+                    fulfill.call(publicAPI, val);
+                }
+                return publicAPI;
+            };
 			
 			if (cb == null) {	// empty promise
 				promise_fulfilled = true;
