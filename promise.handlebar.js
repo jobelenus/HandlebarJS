@@ -13,7 +13,7 @@
 	
 	function engine() {
 		var publicAPI = function(cb) {
-			var publicAPI, queue = [], fail_queue = [], old_ret, promise_fulfilled = false, promise_failed = false;
+			var publicAPI, deferred = -999, queue = [], fail_queue = [], old_ret, promise_fulfilled = false, promise_failed = false;
 			
 			function fulfill(val) {
 				var ret_val = val;
@@ -28,7 +28,8 @@
 						
 						ret_val = queue[0].call(publicAPI,ret_val);
 						
-						if (typeof ret_val == "undefined") { ret_val = old_ret; }
+                        if (ret_val == deferred) { promise_fulfilled = false; promise_failed = false; }
+						else if (typeof ret_val == "undefined") { ret_val = old_ret; }
 						else if (ret_val && !(ret_val instanceof Promise)) old_ret = ret_val;
 											
 						queue.shift();
@@ -86,12 +87,14 @@
 			};
 
             publicAPI.fulfill = function(val) {
-				if (promise_fulfilled) {
+                if(promise_fulfilled)
                     queue.shift(); // feels like i'm cheating
-                    fulfill.call(publicAPI, val);
-                }
+                promise_fulfilled = true
+                fulfill.call(publicAPI, val);
                 return publicAPI;
             };
+
+            publicAPI.deferred = deferred;
 			
 			if (cb == null) {	// empty promise
 				promise_fulfilled = true;
