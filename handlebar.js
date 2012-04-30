@@ -34,7 +34,7 @@
 			_manifest_loading = false
 		;
 		
-		function init(manifest, tmpl_prepend) {
+		function init(manifest, tmpl_prepend, tmpl_append) {
 			_util = publicAPI.Util;
 			_manifest_loading = true;
             _tmpl_prepend = tmpl_prepend || "";
