@@ -26,6 +26,7 @@
 		var publicAPI,
 			manifest,
             _tmpl_prepend,
+            _tmpl_append,
 			_util,
 			_queue = [],
 			_templates = {},
@@ -37,6 +38,7 @@
 			_util = publicAPI.Util;
 			_manifest_loading = true;
             _tmpl_prepend = tmpl_prepend || "";
+            _tmpl_append = tmpl_append || "";
 			publicAPI.manifest = manifest || publicAPI.manifest || "templates.json";
 			publicAPI.Loader.get(publicAPI.manifest)
 			.then(function(P){
@@ -557,7 +559,7 @@
 			var template = templateURLsplit(src);
 			
 			if (template.src) {
-				return publicAPI.Loader.get(_tmpl_prepend+template.src)
+				return publicAPI.Loader.get(_tmpl_prepend+template.src+'?'+_tmpl_append)
 					.then(function(P){
 						return handleTemplate(P.value,template.id,data,template.src);
 					})
